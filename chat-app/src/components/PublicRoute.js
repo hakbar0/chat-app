@@ -4,6 +4,7 @@ import { Container, Loader } from 'rsuite';
 import { useProfile } from '../context/profile.context';
 
 const PublicRoute = ({ children, ...routeProps }) => {
+  const { profile, isLoading } = useProfile();
   if (isLoading && !profile) {
     return (
       <Container>
