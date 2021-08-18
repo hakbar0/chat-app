@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router';
+import { Alert } from 'rsuite';
 import { database } from '../../../misc/firebase';
 import { transformToArrWithId } from '../../../misc/helpers';
 import MessageItem from './MessageItem';
-import { Alert } from 'rsuite';
 
-function Messages() {
+const Messages = () => {
   const { chatId } = useParams();
   const [messages, setMessages] = useState(null);
 
@@ -14,13 +14,16 @@ function Messages() {
 
   useEffect(() => {
     const messagesRef = database.ref('/messages');
+
     messagesRef
       .orderByChild('roomId')
       .equalTo(chatId)
       .on('value', snap => {
         const data = transformToArrWithId(snap.val());
+
         setMessages(data);
       });
+
     return () => {
       messagesRef.off('value');
     };
@@ -54,11 +57,12 @@ function Messages() {
   return (
     <ul className="msg-list custom-scroll">
       {isChatEmpty && <li>No messages yet</li>}
-      {canShowMessages && (
-        <MessageItem key={msg.id} message={msg} handleAdmin={handleAdmin} />
-      )}
+      {canShowMessages &&
+        messages.map(msg => (
+          <MessageItem key={msg.id} message={msg} handleAdmin={handleAdmin} />
+        ))}
     </ul>
   );
-}
+};
 
 export default Messages;
