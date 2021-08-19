@@ -1,18 +1,18 @@
-import React, { Children } from 'react';
-import { IconButton, Whisper, Icon, Badge, Tooltip } from 'rsuite';
+import React from 'react';
+import { Badge, Whisper, Tooltip, IconButton, Icon } from 'rsuite';
 
 const ConditionalBadge = ({ condition, children }) => {
   return condition ? <Badge content={condition}>{children}</Badge> : children;
 };
 
-function IconBtnControl({
+const IconBtnControl = ({
   isVisible,
   iconName,
   tooltip,
   onClick,
   badgeContent,
   ...props
-}) {
+}) => {
   return (
     <div
       className="ml-2"
@@ -38,6 +38,6 @@ function IconBtnControl({
       </ConditionalBadge>
     </div>
   );
-}
+};
 
 export default IconBtnControl;
