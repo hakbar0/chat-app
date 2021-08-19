@@ -9,7 +9,14 @@ import { Button } from 'rsuite';
 import { useHover, useMediaQuery } from '../../../misc/custom-hooks';
 import IconBtnControl from './IconBtnControl';
 
-function MessageItem({ message, handleAdmin, handleLike, likes, likeCount }) {
+function MessageItem({
+  message,
+  handleAdmin,
+  handleLike,
+  likes,
+  likeCount,
+  handleDelete,
+}) {
   const { author, createdAt, text } = message;
 
   const [selfRef, isHovered] = useHover();
@@ -72,6 +79,14 @@ function MessageItem({ message, handleAdmin, handleLike, likes, likeCount }) {
           onClick={() => handleLike(message.id)}
           badgeContent={likeCount}
         />
+        {isAuthor && (
+          <IconBtnControl
+            isVisible={canShowIcons}
+            iconName="close"
+            tooltip="Delete this message"
+            onClick={() => handleDelete(message.id)}
+          />
+        )}
       </div>
 
       <div className="word-breal-all">{text}</div>
