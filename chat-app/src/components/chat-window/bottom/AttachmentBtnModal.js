@@ -6,16 +6,16 @@ import { storage } from '../../../misc/firebase';
 
 const MAX_FILE_SIZE = 1000 * 1024 * 5;
 
-function AttachmentBtnModal() {
+const AttachmentBtnModal = ({ afterUpload }) => {
   const { chatId } = useParams();
   const { isOpen, close, open } = useModalState();
 
   const [fileList, setFileList] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onChange = fileArr => {
     const filtered = fileArr
-      .filtered(el => el.blobFile.size <= MAX_FILE_SIZE)
+      .filter(el => el.blobFile.size <= MAX_FILE_SIZE)
       .slice(0, 5);
 
     setFileList(filtered);
@@ -32,9 +32,9 @@ function AttachmentBtnModal() {
           });
       });
 
-      const uploadSnapShots = await Promise.all(uploadPromises);
+      const uploadSnapshots = await Promise.all(uploadPromises);
 
-      const shapePromises = uploadSnapShots.map(async snap => {
+      const shapePromises = uploadSnapshots.map(async snap => {
         return {
           contentType: snap.metadata.contentType,
           name: snap.metadata.name,
@@ -42,13 +42,14 @@ function AttachmentBtnModal() {
         };
       });
 
-      const files = await shapePromises.all(shapePromises);
+      const files = await Promise.all(shapePromises);
 
       await afterUpload(files);
-      setisLoading(false);
+
+      setIsLoading(false);
       close();
-    } catch (error) {
-      setisLoading(false);
+    } catch (err) {
+      setIsLoading(false);
       Alert.error(err.message);
     }
   };
@@ -58,10 +59,9 @@ function AttachmentBtnModal() {
       <InputGroup.Button onClick={open}>
         <Icon icon="attachment" />
       </InputGroup.Button>
-
       <Modal show={isOpen} onHide={close}>
         <Modal.Header>
-          <Modal.Title>Upload Files</Modal.Title>
+          <Modal.Title>Upload files</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Uploader
@@ -80,12 +80,12 @@ function AttachmentBtnModal() {
             Send to chat
           </Button>
           <div className="text-right mt-2">
-            <small>* only files less than 5mb are allowed.</small>
+            <small>* only files less than 5 mb are allowed</small>
           </div>
         </Modal.Footer>
       </Modal>
     </>
   );
-}
+};
 
 export default AttachmentBtnModal;
