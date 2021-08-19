@@ -8,16 +8,22 @@ import { auth } from '../../../misc/firebase';
 import { Button } from 'rsuite';
 import { useHover, useMediaQuery } from '../../../misc/custom-hooks';
 import IconBtnControl from './IconBtnControl';
+import ImgBtnModal from './ImgBtnModal';
 
-function MessageItem({
-  message,
-  handleAdmin,
-  handleLike,
-  likes,
-  likeCount,
-  handleDelete,
-}) {
-  const { author, createdAt, text } = message;
+const renderFileMessage = file => {
+  if (file.contentType.includes('image')) {
+    return (
+      <div className="height-220">
+        <ImgBtnModal src={file.url} fileName={file.name} />
+      </div>
+    );
+  }
+
+  return <a href={file.url}>Download [{file.name}]</a>;
+};
+
+const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
+  const { author, createdAt, text, file, likes, likeCount } = message;
 
   const [selfRef, isHovered] = useHover();
   const isMobile = useMediaQuery('(max-width: 992px)');
@@ -89,9 +95,12 @@ function MessageItem({
         )}
       </div>
 
-      <div className="word-breal-all">{text}</div>
+      <div>
+        {text && <span className="word-breal-all">{text}</span>}
+        {file && renderFileMessage(file)}
+      </div>
     </li>
   );
-}
+};
 
 export default memo(MessageItem);

@@ -30,7 +30,7 @@ function RoomItem({ room }) {
 
             <div className="text-dissapear ml-2">
               <div className="italic">{lastMessage.author.name}</div>
-              <span>{lastMessage.text}</span>
+              <span>{lastMessage.text || lastMessage.file.name}</span>
             </div>
           </>
         ) : (
