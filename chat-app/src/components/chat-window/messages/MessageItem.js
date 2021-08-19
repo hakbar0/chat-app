@@ -7,6 +7,7 @@ import { useCurrentRoom } from '../../../context/current-room.context';
 import { auth } from '../../../misc/firebase';
 import { Button } from 'rsuite';
 import { useHover } from '../../../misc/custom-hooks';
+import IconBtnControl from './IconBtnControl';
 
 function MessageItem({ message, handleAdmin }) {
   const { author, createdAt, text } = message;
@@ -58,6 +59,14 @@ function MessageItem({ message, handleAdmin }) {
         <TimeAgo
           datetime={createdAt}
           className="font-normal text-black-45 ml-2"
+        />
+        <IconBtnControl
+          {...(true ? { color: 'red' } : {})}
+          isVisible
+          iconName="heart"
+          tooltip="Like this message"
+          onClick={() => {}}
+          badgeContent={5}
         />
       </div>
 
