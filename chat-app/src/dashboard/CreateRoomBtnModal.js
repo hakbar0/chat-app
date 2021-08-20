@@ -13,6 +13,7 @@ import {
 import { useModalState } from '../misc/custom-hooks';
 import firebase from 'firebase/app';
 import { database } from '../misc/firebase';
+import { auth } from '../misc/firebase';
 
 const { StringType } = Schema.Types;
 
